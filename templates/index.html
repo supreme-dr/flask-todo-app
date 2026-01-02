@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>📝 My To-Do App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 My To-Do App</h1>
+
+    <form method="POST" class="task-form">
+        <input type="text" name="task" placeholder="Enter a new task..." required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li>
+            <span class="task-name {% if task.done %}done{% endif %}">
+                {{ task.name }}
+            </span>
+
+            <div class="buttons">
+
+                {% if not task.done %}
+                <form method="POST" action="{{ url_for('mark_done') }}" style="display:inline;">
+                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                    <button class="done-btn">Done</button>
+                </form>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('delete_task') }}" style="display:inline;">
+                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                    <button class="delete-btn">Delete</button>
+                </form>
+
+            </div>
+        </li>
+        {% else %}
+        <p class="empty">No tasks yet</p>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
